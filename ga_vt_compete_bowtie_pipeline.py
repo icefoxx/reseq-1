@@ -78,7 +78,7 @@ with open(inputfile) as fd:
 #$ -o {5}/{0}.log
 #$ -l h_rt=08:00:00
 #$ -pe omp 4
-$BT2_HOME/bowtie2 -x {1} -p 3 --very-sensitive-local -I 0 -X 1000 -1 {2} -2 {3} -U {4} {6} | samtools view -bS - > {5}/{0}.bam
+$BT2_HOME/bowtie2 -x {1} -p 3 --fast-local -I 150 -X 1000 -1 {2} -2 {3} -U {4} {6} --un-conc-gz {5}/{0}.discordant | samtools view -bS - > {5}/{0}.bam
 java -Xmx8g -Djava.io.tmpdir=/scratch/ -jar /projectnb/mullenl/programs/picard-tools-1.74/ReorderSam.jar INPUT={5}/{0}.bam OUTPUT={5}/{0}.reordered.bam REFERENCE={1}.fasta
 java -Xmx8g -Djava.io.tmpdir=/scratch/ -jar /projectnb/mullenl/programs/picard-tools-1.74/SortSam.jar INPUT={5}/{0}.reordered.bam OUTPUT={5}/{0}.sorted.reordered.bam SORT_ORDER=coordinate
 java -Xmx8g -Djava.io.tmpdir=/scratch/ -jar /projectnb/mullenl/programs/picard-tools-1.74/MarkDuplicates.jar INPUT={5}/{0}.sorted.reordered.bam OUTPUT={5}/{0}.deduped.sorted.reordered.bam METRICS_FILE={5}/{0}.metrics.txt CREATE_INDEX=true MAX_FILE_HANDLES_FOR_READ_ENDS_MAP=500 ASSUME_SORTED=true 
